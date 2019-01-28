@@ -168,7 +168,7 @@ public class StreamAPITest {
     List<String> parallel = new ArrayList<>();
     alphabet.stream().parallel().forEach(v -> parallel.add(v)); // side-effects
     parallel.forEach(System.out::println);
-    assertThat(parallel).contains("a", "b", "c", "d", "e", "f"); // Assertion ERROR!!
+    assertThat(parallel).contains("a", "b", "c", "d", "e", "f"); // Error! not containsExactry
 
   }
 
