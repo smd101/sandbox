@@ -5,7 +5,6 @@ import com.example.sandbox.repository.TxRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -24,10 +23,19 @@ public class TxOuterService {
     } catch (Throwable e) {
       e.printStackTrace();
     }
+
+    for(int i=0;i<2;i++) {
+      try {
+        txInnerService.saveWithError(String.valueOf("2-"+i));
+      } catch (Throwable e) {
+        e.printStackTrace();
+      }  
+    }
+
     repository.save(TxEntity.builder().value("3").build());
 
     
-    if(true)
+    if(false)
       throw new RuntimeException("ERROR 3");
 
   }
