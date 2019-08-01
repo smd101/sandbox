@@ -21,6 +21,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -73,9 +75,12 @@ public class DateAPITest {
   @Test
   public void JsonValueがISO8601_UTC準拠であること() throws JsonProcessingException, ParseException {
     Date date = DateUtils.parseDate("2017/03/14 13:32:09", "yyyy/MM/dd HH:mm:ss");
-    Date utc = new Date();
+    Gson gson = new GsonBuilder()
+      .setDateFormat("yyyy-MM-dd'T'HH:mm:ssz")
+      .create();
+    
     ObjectMapper mapper = new ObjectMapper();
     String json = mapper.writeValueAsString(date);
-    assertThat(json).isEqualTo("\"2017-03-14T04:32:09\"");
+    assertThat(gson.toJson(date)).isEqualTo("\"2017-03-14T13:32:09JST\"");
   }
 }
