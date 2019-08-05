@@ -23,7 +23,7 @@ public class AsyncTest {
 
   @Test
   public void Test2() throws Exception {
-    List<String> users = asyncManager.findUsers();
+    List<String> users = asyncManager.createZips();
     log.info("users: {}", users);
   }
 
