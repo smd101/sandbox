@@ -31,9 +31,7 @@ public class AsyncManager {
     // 返却値の作成
     List<String> names = new ArrayList<>();
     for(CompletableFuture<String> process : processes) {
-        process.thenAcceptAsync(processResult -> {
-            log.warn("finished name=" + processResult);
-        });
+        process.thenAcceptAsync(processResult -> log.warn("finished name=" + processResult));
         names.add(process.get());
     }
 

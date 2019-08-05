@@ -1,7 +1,5 @@
 package com.example.sandbox;
 
-import static org.assertj.core.api.Assertions.*;
-
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
