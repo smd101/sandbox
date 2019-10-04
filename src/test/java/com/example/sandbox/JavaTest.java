@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import org.junit.Ignore;
@@ -98,7 +100,8 @@ public class JavaTest {
     Map<String, List<Row>> mm = rows.stream().collect(Collectors.groupingBy(Row::getKey));
 
     mm.forEach((k, v) -> {
-      System.out.println(String.format("%s -> %f", k, v.stream().map(Row::getValue).reduce(BigDecimal.ZERO, BigDecimal::add)));
+      System.out.println(
+          String.format("%s -> %f", k, v.stream().map(Row::getValue).reduce(BigDecimal.ZERO, BigDecimal::add)));
     });
   }
 
@@ -112,6 +115,18 @@ public class JavaTest {
     System.out.println(ans);
     System.out.println(one.subtract(one.multiply(three).divide(three)));
 
+  }
+
+  @Test
+  public void listTest() throws InterruptedException, ExecutionException {
+    List<CompletableFuture<String>> futures = new ArrayList<>();
+    futures.add(CompletableFuture.completedFuture("OK!"));
+    futures.add(CompletableFuture.completedFuture("OK!!"));
+    futures.add(CompletableFuture.completedFuture("NG!"));
+    futures.add(CompletableFuture.completedFuture("OK!!!"));
+    for (CompletableFuture<String> future : futures) {
+      System.out.println("##### " + future.get());
+    }
   }
 
 }

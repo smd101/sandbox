@@ -11,6 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import lombok.NonNull;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class AsyncService {
 
-  @Async("Thread2")
+  @Async("Thread0")
   public CompletableFuture<String> createZips(String name, Long sleepTime) throws InterruptedException {
-    
+
     log.warn("Async function started. processName: " + name + " sleepTime: " + sleepTime);
-    
+
     String fileKeyName = name;
 
     // どっかぶり
@@ -36,7 +37,7 @@ public class AsyncService {
     // ランダムなら当然、衝突する可能性がある
     // int rnd = new Random().nextInt(999999);
     // String fileNum = String.format("%06d", rnd);
-    
+
     // スレッドIDを使用すれば被らないけど、Integer.MAX まであり得る（スレッドチューニング次第）
     String fileNum = String.format("%06d", Thread.currentThread().getId());
 
@@ -46,14 +47,15 @@ public class AsyncService {
     // File zipFile = new File(FilenameUtils.getName(fileKeyName.concat(".zip")));
     File inputFile = new File(AsyncService.class.getClassLoader().getResource(fileKeyName.concat(".txt")).getPath());
     log.info("##### {} inputFile.length: {}", name, inputFile.length());
-    try (InputStream is = new FileInputStream(inputFile)){
-      ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)),Charset.forName("MS932"));
-      putZipEntry(zos, is, fileKeyName.concat(".inf"));    
-      zos.close();    
+    try (InputStream is = new FileInputStream(inputFile)) {
+      ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)),
+          Charset.forName("MS932"));
+      putZipEntry(zos, is, fileKeyName.concat(".inf"));
+      zos.close();
     } catch (Exception e) {
       log.error("failed to create zip file from outputData", e);
     }
-    
+
     Thread.sleep(sleepTime);
 
     log.info("##### {} zipFile.length: {}", name, zipFile.length());
@@ -66,13 +68,11 @@ public class AsyncService {
     ZipEntry entry = new ZipEntry(fileName);
     zos.putNextEntry(entry);
     try (InputStream iss = new BufferedInputStream(is)) {
-        byte[] buf = new byte[1024];
-        for (int len = 0; 0 < (len = iss.read(buf));) {
-            zos.write(buf, 0, len);
-        }
+      byte[] buf = new byte[1024];
+      for (int len = 0; 0 < (len = iss.read(buf));) {
+        zos.write(buf, 0, len);
+      }
     }
   }
 
-
 }
-

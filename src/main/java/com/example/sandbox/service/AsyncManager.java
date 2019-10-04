@@ -21,25 +21,27 @@ public class AsyncManager {
 
     log.warn("request started");
     List<CompletableFuture<String>> processes = new ArrayList<>();
-    for(int i = 0; i<10; i++) {
-    CompletableFuture<String> process = asyncService.createZips("process-" + i, (i+1) * 100L);    
-    processes.add(process);
+    for (int i = 0; i < 0; i++) {
+      CompletableFuture<String> process = asyncService.createZips("process-" + i, (i + 1) * 100L);
+      processes.add(process);
     }
+
+    log.info("###### Threadの作成終了！");
 
     CompletableFuture.allOf(processes.toArray(new CompletableFuture[processes.size()])).join();
 
     // 返却値の作成
     List<String> names = new ArrayList<>();
-    for(CompletableFuture<String> process : processes) {
-        process.thenAcceptAsync(processResult -> log.warn("finished name=" + processResult));
-        names.add(process.get());
+    for (CompletableFuture<String> process : processes) {
+      process.thenAcceptAsync(processResult -> log.warn("finished name=" + processResult));
+      names.add(process.get());
     }
 
     Thread.sleep(10L);
 
     long end = System.currentTimeMillis();
     // 処理全体の時間を出力
-    log.warn("request finished. time: " + ((end - start))  + "ms");
+    log.warn("request finished. time: " + ((end - start)) + "ms");
 
     return names;
   }
