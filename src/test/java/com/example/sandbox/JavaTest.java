@@ -19,9 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class JavaTest {
 
   @Test
@@ -67,6 +69,9 @@ public class JavaTest {
     System.out.println(a + " " + b + " " + c);
 
     Map<String, BigDecimal> map = new HashMap<>();
+    BigDecimal v = map.getOrDefault("TEST",BigDecimal.ZERO);    
+    log.info("##### value: {}", v);
+
     map.put("a", BigDecimal.ONE);
     map.put("a", map.get("a").add(BigDecimal.TEN));
     System.out.println(map.get("a"));

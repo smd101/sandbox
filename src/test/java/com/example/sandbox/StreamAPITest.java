@@ -146,6 +146,23 @@ public class StreamAPITest {
     System.out.println(summary);
   }
 
+  @Test
+  public void stream_foreach_return() {
+    List<Fuga> fugas = Arrays.asList(
+        new Fuga("A", "a", BigDecimal.valueOf(1)),
+        new Fuga("B", "a", BigDecimal.valueOf(3)),
+        new Fuga("B", "b", BigDecimal.valueOf(5)),
+        new Fuga("B", "a", BigDecimal.valueOf(7)),
+        new Fuga("A", "a", BigDecimal.valueOf(11)));
+
+    fugas.stream()
+        .forEachOrdered(v->{
+          System.out.println(v.getKey1());
+          return;
+        });
+
+  }
+
   @Data
   @AllArgsConstructor
   private static class Moge {
